@@ -79,10 +79,12 @@ void loop() {
     Serial.println(button);
     if (button == '1') {
       servo_angle = 0;
-    } else if (button == '4') {
-      servo_angle = 45;
+    } else if (button == '2'){
+      servo_angle = 15;
+    }else if (button == '4') {
+      servo_angle = 30;
     } else if (button == '7') {
-      servo_angle = 90;
+      servo_angle = 45;
     } else if (button == '*') {
       calculate_distance();
     }
