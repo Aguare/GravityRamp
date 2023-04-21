@@ -34,9 +34,12 @@ private:
   int maxDistance;
 };
 
-#include <Keypad.h>
 #include <Servo.h>
 #include <SoftwareSerial.h>
+
+//BT COMUNICATION
+SoftwareSerial BT(3, 2);  // 2 RXD, 3 TXDB
+char incomingByte;
 
 // SERVO MOTORS
 #define SERVOPIN 13
@@ -56,9 +59,6 @@ Servo servo_2;
 NewPing sensor_ult1(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 NewPing sensor_ult2(TRIGGER2_PIN, ECHO2_PIN, MAX_DISTANCE);
 
-// BLUETOOTH
-SoftwareSerial BT(6, 7); // 6 RXD, 7 TXD
-char incomingByte;
 
 void setup() {
   Serial.begin(9600);
@@ -70,19 +70,26 @@ void setup() {
 }
 
 void loop() {
-  if (BT.available()) {
+  if (BT.available() > 0) {
     incomingByte = BT.read();
     Serial.println(incomingByte);
     if (incomingByte == '1') {
       servo_angle = 0;
+      BT.print("0 grados");
     } else if (incomingByte == '2'){
       servo_angle = 15;
+      BT.print("15 grados");
     }else if (incomingByte == '4') {
       servo_angle = 30;
+      BT.print("30 grados");
     } else if (incomingByte == '7') {
       servo_angle = 45;
+       BT.print("45 grados");
     } else if (incomingByte == '*') {
       calculate_distance();
+      BT.print("8456464.45 segundos");
+    }else{
+      BT.print("No chona");
     }
     move_servo(servo_angle);
   }

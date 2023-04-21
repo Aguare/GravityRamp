@@ -3,5 +3,5 @@
     "sketch": "comunicationBT.cpp",
     "output": "build",
     "port": "/dev/ttyACM0",
-    "programmer": "arduino:arduinoisp"
+    "programmer": "arduino:avrispmkii"
 }

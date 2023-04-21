@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
 
-SoftwareSerial BT(10, 11);  // 11 RXD, 10 TXD
+SoftwareSerial BT(3, 2);  // 2 RXD, 3 TXD
 
 char incomingByte;
 
@@ -25,7 +25,6 @@ void loop() {
     } else if (incomingByte == '*') {
       BT.print("8456464.45 segundos");
     } else if (incomingByte == '!') {
-      delay(20000);
       BT.print("8456464.45 segundos");
     }else{
       BT.print("No chona");
