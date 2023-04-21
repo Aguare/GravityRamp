@@ -11,7 +11,7 @@ void setup() {
 }
 
 void loop() {
-  if (BT.available() > 0) {
+  if (BT.available()) {
     incomingByte = BT.read();
     Serial.println(incomingByte);
   }

@@ -36,6 +36,7 @@ private:
 
 #include <Keypad.h>
 #include <Servo.h>
+#include <SoftwareSerial.h>
 
 // SERVO MOTORS
 #define SERVOPIN 13
@@ -44,15 +45,6 @@ int servo_angle = 0;
 Servo servo_1;
 Servo servo_2;
 
-// KEYPAD
-byte rows[4] = {7, 6, 5, 4};
-byte cols[4] = {3, 2, 1, 0};
-char options[4][4] = {{'1', '2', '3', 'A'},
-                      {'4', '5', '6', 'B'},
-                      {'7', '8', '9', 'C'},
-                      {'*', '0', '#', 'D'}};
-Keypad keyword = Keypad(makeKeymap(options), rows, cols, 4, 4);
-char button;
 
 // ULTRASONIC SENSORS
 #define TRIGGER2_PIN 8
@@ -64,8 +56,13 @@ char button;
 NewPing sensor_ult1(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 NewPing sensor_ult2(TRIGGER2_PIN, ECHO2_PIN, MAX_DISTANCE);
 
+// BLUETOOTH
+SoftwareSerial BT(6, 7); // 6 RXD, 7 TXD
+char incomingByte;
+
 void setup() {
   Serial.begin(9600);
+  BT.begin(9600);
   servo_1.attach(SERVOPIN);
   servo_2.attach(SERVO_RAMP);
   servo_1.write(0);
@@ -73,19 +70,18 @@ void setup() {
 }
 
 void loop() {
-  // Read the keypad
-  button = keyword.getKey();
-  if (button) {
-    Serial.println(button);
-    if (button == '1') {
+  if (BT.available()) {
+    incomingByte = BT.read();
+    Serial.println(incomingByte);
+    if (incomingByte == '1') {
       servo_angle = 0;
-    } else if (button == '2'){
+    } else if (incomingByte == '2'){
       servo_angle = 15;
-    }else if (button == '4') {
+    }else if (incomingByte == '4') {
       servo_angle = 30;
-    } else if (button == '7') {
+    } else if (incomingByte == '7') {
       servo_angle = 45;
-    } else if (button == '*') {
+    } else if (incomingByte == '*') {
       calculate_distance();
     }
     move_servo(servo_angle);

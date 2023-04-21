@@ -8,11 +8,27 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import java.io.BufferedReader
+import java.io.DataInputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.util.*
 
 const val REQUEST_ENABLE_BT = 1
@@ -24,25 +40,27 @@ class ConnectionBT(var bundle: MainActivity) {
 
     companion object{
         var my_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-        private var socketBt: BluetoothSocket? = null
+        var socketBt: BluetoothSocket? = null
 
         var isConnected: Boolean = false
         lateinit var addres: String
+        lateinit var text_entrys: EditText
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun getConnect(){
         addressDevice = ArrayAdapter(this.bundle, android.R.layout.simple_list_item_1)
         nameDevices = ArrayAdapter(this.bundle, android.R.layout.simple_list_item_1)
 
-        val button_on = this.bundle.findViewById<Button>(R.id.button_On)
+        val button_on = this.bundle.findViewById<Button>(R.id.button_on)
         val button_off = this.bundle.findViewById<Button>(R.id.button_off)
         val button_connect = this.bundle.findViewById<Button>(R.id.button_connect)
         val button_send = this.bundle.findViewById<Button>(R.id.button_send)
         val button_devices = this.bundle.findViewById<Button>(R.id.button_devices)
-        val button_arduino = this.bundle.findViewById<Button>(R.id.button_arduino)
 
         val spinner_avaiable = this.bundle.findViewById<Spinner>(R.id.spinner_avaiable)
         val text_send = this.bundle.findViewById<EditText>(R.id.text_send)
+        text_entrys = this.bundle.findViewById<EditText>(R.id.text_entrys)
 
         val someActivityResultLauncher = this.bundle.registerForActivityResult(
             StartActivityForResult()
@@ -61,9 +79,6 @@ class ConnectionBT(var bundle: MainActivity) {
         }catch (e: java.lang.Exception){
             Toast.makeText(this.bundle, "No se puede acceder al BT", Toast.LENGTH_LONG).show()
         }
-
-
-
 
         button_on.setOnClickListener{
             if (btAdapter.isEnabled){
@@ -98,7 +113,6 @@ class ConnectionBT(var bundle: MainActivity) {
                     addressDevice!!.add(deviceHardwareAddres)
                     nameDevices!!.add(deviceName)
                 }
-
                 spinner_avaiable.adapter = nameDevices
             }else{
                 val noDevices = "Ningún dispositivo pudo ser emparejado"
@@ -134,23 +148,132 @@ class ConnectionBT(var bundle: MainActivity) {
                 Toast.makeText(this.bundle, "No puede enviar un mensaje vacío", Toast.LENGTH_SHORT).show()
             }else{
                 var message: String = text_send.text.toString()
+                text_send.text.clear()
                 sendCommand(message)
             }
         }
 
-        button_arduino.setOnClickListener{
-            this.bundle.setContentView(R.layout.activity_main)
-            this.bundle.changeUpdateChart()
+        val button_15 = this.bundle.findViewById<Button>(R.id.button_15)
+        val button_30 = this.bundle.findViewById<Button>(R.id.button_30)
+        val button_45 = this.bundle.findViewById<Button>(R.id.button_45)
+        val button_start = this.bundle.findViewById<Button>(R.id.button_start)
+        val button_getTime = this.bundle.findViewById<Button>(R.id.button_getTime)
+        val button_clear = this.bundle.findViewById<Button>(R.id.button_clear)
+        val button_chart = this.bundle.findViewById<Button>(R.id.button_chart)
+        val button_export = this.bundle.findViewById<Button>(R.id.button_export)
+
+        button_15.setOnClickListener{
+            sendCommand("2")
+        }
+
+        button_30.setOnClickListener{
+            sendCommand("4")
+        }
+
+        button_45.setOnClickListener{
+            sendCommand("7")
+        }
+
+        button_start.setOnClickListener{
+            sendCommand("*")
+            if (socketBt != null){
+                button_getTime.isEnabled = true
+            }
+        }
+
+        button_getTime.setOnClickListener{
+            if (socketBt != null){
+                receiveDataFromBluetooth("!")
+                button_getTime.isEnabled = false
+            }
+        }
+
+        button_clear.setOnClickListener{
+            text_entrys.text.clear()
+        }
+
+        button_export.setOnClickListener{
+            val chart: BarChart = this.bundle.findViewById(R.id.chart)
+            if (chart.data != null){
+                chart.saveToGallery("mi_grafica", "Pictures", "Grafica app", Bitmap.CompressFormat.PNG, 100)
+                Toast.makeText(this.bundle, "Guardado en la galería", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        button_chart.setOnClickListener{
+            if (!text_entrys.text.isEmpty()){
+                val data = text_entrys.text.split("\n").map { it.toFloat() }
+                generateGraphic(data)
+            }else{
+                Toast.makeText(this.bundle, "No se puede graficar sin datos", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
-    private fun sendCommand(input: String){
+
+    fun receiveDataFromBluetooth(input: String) {
+        if (input == "*"){
+            Thread.sleep(50000)
+        }else if (input != "!"){
+            Thread.sleep(1000)
+        }
+            try{
+                val btInput: InputStream? = socketBt?.inputStream
+                val buffer = ByteArray(1024)
+                var bytes: Int
+                while (true){
+                    bytes = btInput!!.read(buffer)
+                    val message = String(buffer, 0, bytes)
+                    Toast.makeText(this.bundle, "Tiempo recibido: $message ms", Toast.LENGTH_LONG).show()
+                    text_entrys.append(message+"\n")
+                    break
+                }
+            }catch (e: java.lang.Exception){
+                Log.i("Error", "No se pudo guardar la información")
+                Toast.makeText(this.bundle, "Error al recibir el tiempo", Toast.LENGTH_LONG).show()
+                e.printStackTrace()
+            }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun sendCommand(input: String){
         if (socketBt != null){
             try {
                 socketBt!!.outputStream.write((input.toByteArray()))
+                if (input != "*"){
+                    receiveDataFromBluetooth(input)
+                }
             }catch (e: IOException){
-                e.printStackTrace()
+                Toast.makeText(this.bundle, "No se pudo enviar el mensaje", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
+    fun generateGraphic(nums: List<Float>){
+        val chart: BarChart = this.bundle.findViewById(R.id.chart)
+        val left = chart.axisLeft
+        val right = chart.axisRight
+        right.setDrawLabels(false)
+
+        left.setDrawAxisLine(true)
+        left.setDrawGridLines(false)
+        //left.axisMinimum = 8f
+        //left.axisMaximum = 10f
+
+        val entries = nums.mapIndexed {index, number ->
+            BarEntry(index.toFloat(), number)
+        }
+
+        val dataSet = BarDataSet(entries, "Tiempo")
+        val data = BarData(dataSet)
+
+        chart.data = data
+        chart.description.isEnabled = false
+        chart.setDrawValueAboveBar(false)
+        chart.setDrawGridBackground(false)
+        chart.animateY(2000)
+        chart.invalidate()
+    }
+
 }
