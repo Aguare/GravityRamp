@@ -1,7 +1,14 @@
 {
     "board": "arduino:avr:uno",
+<<<<<<< Updated upstream
     "sketch": "comunicationBT.cpp",
     "output": "build",
     "port": "/dev/ttyACM0",
     "programmer": "arduino:avrispmkii"
+=======
+    "programmer": "avrispmkii",
+    "port": "/dev/ttyACM0",
+    "sketch": "comunicationBT.cpp",
+    "output": "build"
+>>>>>>> Stashed changes
 }

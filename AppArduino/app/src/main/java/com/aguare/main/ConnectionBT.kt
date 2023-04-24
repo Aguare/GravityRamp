@@ -150,6 +150,7 @@ class ConnectionBT(var bundle: MainActivity) {
                 var message: String = text_send.text.toString()
                 text_send.text.clear()
                 sendCommand(message)
+                text_send.text.clear()
             }
         }
 
@@ -247,6 +248,8 @@ class ConnectionBT(var bundle: MainActivity) {
             }catch (e: IOException){
                 Toast.makeText(this.bundle, "No se pudo enviar el mensaje", Toast.LENGTH_SHORT).show()
             }
+        }else{
+            Toast.makeText(this.bundle, "No existe el socket", Toast.LENGTH_SHORT).show()
         }
     }
 
