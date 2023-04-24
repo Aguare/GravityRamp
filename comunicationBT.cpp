@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(9600);
   BT.begin(9600);
 }
-
+// Este cambio lo hizo canche
 void loop() {
   if (BT.available()) {
     incomingByte = BT.read();

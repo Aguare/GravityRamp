@@ -29,9 +29,9 @@ public:
   }
 
 private:
-  int trigPin;
-  int echoPin;
-  int maxDistance;
+  int trigPin; // Trigger pin
+  int echoPin; // Echo pin
+  int maxDistance;// Maximum distance value
 };
 
 #include <Servo.h>
@@ -59,7 +59,7 @@ Servo servo_2;
 NewPing sensor_ult1(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 NewPing sensor_ult2(TRIGGER2_PIN, ECHO2_PIN, MAX_DISTANCE);
 
-
+// Function prototypes
 void setup() {
   Serial.begin(9600);
   BT.begin(9600);
