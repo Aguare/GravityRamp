@@ -88,6 +88,9 @@ void loop() {
     } else if (incomingByte == '*') {
       calculate_distance();
       BT.print("8456464.45 segundos");
+    }else if (incomingByte == '0'){
+      servo_angle = 0;
+      BT.print("0 Grados");
     }else{
       BT.print("No chona");
     }
