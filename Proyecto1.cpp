@@ -96,7 +96,7 @@ void loop() {
 }
 
 // Function to move the servos
-void move_servo(int angle) { servo_1.write(angle); }
+void move_servo(int angle) { servo_1.write(angle); servo_2.write(180-angle); }
 
 void calculate_distance() {
   long time_start = 0;
