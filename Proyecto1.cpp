@@ -66,7 +66,7 @@ void setup() {
   servo_1.attach(SERVOPIN);
   servo_2.attach(SERVO_RAMP);
   servo_1.write(0);
-  servo_2.write(90);
+  servo_2.write(0);
 }
 
 void loop() {
