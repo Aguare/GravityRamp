@@ -29,6 +29,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.time.LocalDateTime
 import java.util.*
 
 const val REQUEST_ENABLE_BT = 1
@@ -154,6 +155,7 @@ class ConnectionBT(var bundle: MainActivity) {
             }
         }
 
+        val button_0 = this.bundle.findViewById<Button>(R.id.button_0)
         val button_15 = this.bundle.findViewById<Button>(R.id.button_15)
         val button_30 = this.bundle.findViewById<Button>(R.id.button_30)
         val button_45 = this.bundle.findViewById<Button>(R.id.button_45)
@@ -162,6 +164,10 @@ class ConnectionBT(var bundle: MainActivity) {
         val button_clear = this.bundle.findViewById<Button>(R.id.button_clear)
         val button_chart = this.bundle.findViewById<Button>(R.id.button_chart)
         val button_export = this.bundle.findViewById<Button>(R.id.button_export)
+
+        button_0.setOnClickListener{
+            sendCommand("0")
+        }
 
         button_15.setOnClickListener{
             sendCommand("2")
@@ -195,8 +201,9 @@ class ConnectionBT(var bundle: MainActivity) {
 
         button_export.setOnClickListener{
             val chart: BarChart = this.bundle.findViewById(R.id.chart)
+            val time: String = LocalDateTime.now().toString()
             if (chart.data != null){
-                chart.saveToGallery("mi_grafica", "Pictures", "Grafica app", Bitmap.CompressFormat.PNG, 100)
+                chart.saveToGallery(time, "Pictures", "Grafica app", Bitmap.CompressFormat.PNG, 100)
                 Toast.makeText(this.bundle, "Guardado en la galería", Toast.LENGTH_LONG).show()
             }
         }

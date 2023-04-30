@@ -127,9 +127,18 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/button_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:layout_weight="1"
+                    android:text="0" />
+
+                <Button
                     android:id="@+id/button_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
                     android:layout_weight="1"
                     android:text="15" />
@@ -191,6 +200,9 @@
                 android:id="@+id/text_entrys"
                 android:layout_width="match_parent"
                 android:layout_height="121dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:textIsSelectable="false"
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="none|textMultiLine" />
