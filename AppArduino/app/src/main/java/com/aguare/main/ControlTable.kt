@@ -173,6 +173,32 @@ class ControlTable(var bundle: MainActivity) {
         generatedGraphic(time_45, ac_45, ac_time_45, "ACELERACIÓN VS TIEMPO", false)
     }
 
+    private fun getMin(list: ArrayList<Float>): Float{
+        if (list.isEmpty()) {
+            return 0f
+        }
+        var minimum = list[0]
+        for (value in list) {
+            if (value < minimum) {
+                minimum = value
+            }
+        }
+        return minimum
+    }
+
+    fun getMax(array: ArrayList<Float>): Float {
+        if (array.isEmpty()) {
+            return 0f
+        }
+        var max = array[0]
+        for (num in array) {
+            if (num > max) {
+                max = num
+            }
+        }
+        return max
+    }
+
     private fun generatedGraphic(
         axisx: ArrayList<Float>,
         axisy: ArrayList<Float>,
@@ -180,14 +206,20 @@ class ControlTable(var bundle: MainActivity) {
         title: String,
         isDistanceTime: Boolean
     ) {
+        val xaxis = chart.xAxis
         var barWidth = 0.4f / axisx.size
+        xaxis.labelCount = 10
         if (isDistanceTime) {
             barWidth = 0.75f
+        }else{
+            xaxis.axisMinimum = getMin(axisx) - 0.2f
+            xaxis.axisMaximum = getMax(axisx) + 0.2f
         }
 
         val left = chart.axisLeft
         val right = chart.axisRight
-        val xaxis = chart.xAxis
+
+        xaxis.granularity = 0.1f
         right.setDrawLabels(false)
 
         left.setDrawAxisLine(true)
@@ -214,7 +246,7 @@ class ControlTable(var bundle: MainActivity) {
         chart.description.text = title
         chart.data = data
         xaxis.position = XAxis.XAxisPosition.BOTTOM
-        xaxis.valueFormatter = xValueFormatter
+        //xaxis.valueFormatter = xValueFormatter
 
         chart.setDrawValueAboveBar(false)
         chart.setDrawGridBackground(false)
