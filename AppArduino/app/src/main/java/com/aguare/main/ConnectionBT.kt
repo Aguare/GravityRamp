@@ -9,28 +9,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import java.io.BufferedReader
-import java.io.DataInputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.io.InputStreamReader
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 const val REQUEST_ENABLE_BT = 1
@@ -40,6 +31,11 @@ class ConnectionBT(var bundle: MainActivity) {
     lateinit var btAdapter: BluetoothAdapter
     var addressDevice: ArrayAdapter<String>? = null
     var nameDevices: ArrayAdapter<String>? = null
+
+    //list for medition with angles
+    var actual_angle = 0
+    lateinit var control: ControlTable
+
 
     companion object {
         var my_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
@@ -175,18 +171,22 @@ class ConnectionBT(var bundle: MainActivity) {
         val button_export = this.bundle.findViewById<Button>(R.id.button_export)
 
         button_0.setOnClickListener {
+            actual_angle = 0
             sendCommand("0")
         }
 
         button_15.setOnClickListener {
+            actual_angle = 15
             sendCommand("2")
         }
 
         button_30.setOnClickListener {
+            actual_angle = 30
             sendCommand("4")
         }
 
         button_45.setOnClickListener {
+            actual_angle = 45
             sendCommand("7")
         }
 
@@ -209,12 +209,35 @@ class ConnectionBT(var bundle: MainActivity) {
         }
 
         button_export.setOnClickListener {
-            val chart: BarChart = this.bundle.findViewById(R.id.chart)
+            control.entryTime(4.4f, 15)
+            control.entryTime(4.1f, 15)
+            control.entryTime(4.2f, 15)
+            control.entryTime(4.5f, 15)
+            control.entryTime(4.7f, 15)
+
+            control.entryTime(3.2f, 30)
+            control.entryTime(3.3f, 30)
+            control.entryTime(3.1f, 30)
+            control.entryTime(3.5f, 30)
+            control.entryTime(3.0f, 30)
+
+            control.entryTime(2.5f, 45)
+            control.entryTime(2.4f, 45)
+            control.entryTime(2.7f, 45)
+            control.entryTime(2.1f, 45)
+            control.entryTime(2.4f, 45)
+            val chart: BarChart = this.bundle.findViewById(R.id.distance_time_15)
             val time: LocalDate = LocalDate.now()
             val nameFile = time.toString()
             if (chart.data != null) {
                 chart.saveToGallery(nameFile)
-                chart.saveToGallery(nameFile, "Downloads", "Grafica app", Bitmap.CompressFormat.PNG, 100)
+                chart.saveToGallery(
+                    nameFile,
+                    "Downloads",
+                    "Grafica app",
+                    Bitmap.CompressFormat.PNG,
+                    75
+                )
                 Toast.makeText(this.bundle, "Guardado en la galería", Toast.LENGTH_LONG).show()
             }
         }
@@ -229,13 +252,14 @@ class ConnectionBT(var bundle: MainActivity) {
             }
 
         }
+        control = ControlTable(this.bundle)
     }
 
 
     fun receiveDataFromBluetooth(input: String) {
-        if (input == "*"){
+        if (input == "*") {
             Thread.sleep(5000)
-        }else{
+        } else {
             Thread.sleep(600)
         }
         try {
@@ -246,10 +270,23 @@ class ConnectionBT(var bundle: MainActivity) {
                 bytes = btInput!!.read(buffer)
                 val message = String(buffer, 0, bytes)
 
-                if (input == "*"){
+                if (input == "*") {
                     text_entrys.append(message + "\n")
-                }else{
-                    Toast.makeText(this.bundle, "Angulo ajustado a $message grados", Toast.LENGTH_LONG)
+                    var res = control.entryTime(message.toFloat(), actual_angle)
+                    if (!res){
+                        Toast.makeText(
+                            this.bundle,
+                            "No se guardan valores en angulo 0",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                    }
+                } else {
+                    Toast.makeText(
+                        this.bundle,
+                        "Angulo ajustado a $message grados",
+                        Toast.LENGTH_LONG
+                    )
                         .show()
                 }
                 break
@@ -277,7 +314,7 @@ class ConnectionBT(var bundle: MainActivity) {
     }
 
     fun generateGraphic(nums: List<Float>) {
-        val chart: BarChart = this.bundle.findViewById(R.id.chart)
+        val chart: BarChart = this.bundle.findViewById(R.id.distance_time_15)
         val left = chart.axisLeft
         val right = chart.axisRight
         right.setDrawLabels(false)
