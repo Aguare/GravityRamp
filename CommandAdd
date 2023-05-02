@@ -1,0 +1,3 @@
+android:clickable="false"
+                android:focusable="false"
+                android:textIsSelectable="false"

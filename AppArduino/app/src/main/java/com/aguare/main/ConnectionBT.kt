@@ -29,6 +29,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -209,9 +210,11 @@ class ConnectionBT(var bundle: MainActivity) {
 
         button_export.setOnClickListener {
             val chart: BarChart = this.bundle.findViewById(R.id.chart)
-            val time: String = LocalDateTime.now().toString()
+            val time: LocalDate = LocalDate.now()
+            val nameFile = time.toString()
             if (chart.data != null) {
-                chart.saveToGallery(time, "Pictures", "Grafica app", Bitmap.CompressFormat.PNG, 100)
+                chart.saveToGallery(nameFile)
+                chart.saveToGallery(nameFile, "Downloads", "Grafica app", Bitmap.CompressFormat.PNG, 100)
                 Toast.makeText(this.bundle, "Guardado en la galería", Toast.LENGTH_LONG).show()
             }
         }
@@ -281,8 +284,6 @@ class ConnectionBT(var bundle: MainActivity) {
 
         left.setDrawAxisLine(true)
         left.setDrawGridLines(false)
-        //left.axisMinimum = 8f
-        //left.axisMaximum = 10f
 
         val entries = nums.mapIndexed { index, number ->
             BarEntry(index.toFloat(), number)
@@ -291,8 +292,9 @@ class ConnectionBT(var bundle: MainActivity) {
         val dataSet = BarDataSet(entries, "Tiempo")
         val data = BarData(dataSet)
 
+        chart.description.text = "VELOCIDAD VS TIEMPO"
         chart.data = data
-        chart.description.isEnabled = false
+        //chart.description.isEnabled = false
         chart.setDrawValueAboveBar(false)
         chart.setDrawGridBackground(false)
         chart.animateY(2000)
