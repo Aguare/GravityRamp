@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -189,9 +189,9 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="DATOS RECIBIDOS"
                 android:textAlignment="center"
-                android:layout_marginTop="10dp"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -201,11 +201,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="121dp"
                 android:clickable="false"
-                android:focusable="false"
-                android:textIsSelectable="false"
                 android:ems="10"
+                android:focusable="false"
                 android:gravity="start|top"
-                android:inputType="none|textMultiLine" />
+                android:inputType="none|textMultiLine"
+                android:textIsSelectable="false" />
 
         </LinearLayout>
 

@@ -33,13 +33,14 @@ import java.time.LocalDateTime
 import java.util.*
 
 const val REQUEST_ENABLE_BT = 1
+
 class ConnectionBT(var bundle: MainActivity) {
 
     lateinit var btAdapter: BluetoothAdapter
     var addressDevice: ArrayAdapter<String>? = null
-    var nameDevices: ArrayAdapter<String>? =  null
+    var nameDevices: ArrayAdapter<String>? = null
 
-    companion object{
+    companion object {
         var my_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         var socketBt: BluetoothSocket? = null
 
@@ -49,7 +50,7 @@ class ConnectionBT(var bundle: MainActivity) {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun getConnect(){
+    fun getConnect() {
         addressDevice = ArrayAdapter(this.bundle, android.R.layout.simple_list_item_1)
         nameDevices = ArrayAdapter(this.bundle, android.R.layout.simple_list_item_1)
 
@@ -65,67 +66,73 @@ class ConnectionBT(var bundle: MainActivity) {
 
         val someActivityResultLauncher = this.bundle.registerForActivityResult(
             StartActivityForResult()
-        ){ result ->
-            if (result.resultCode == REQUEST_ENABLE_BT){
+        ) { result ->
+            if (result.resultCode == REQUEST_ENABLE_BT) {
                 Log.i("MainActivity", "Actividad Registrada")
             }
         }
         try {
-            btAdapter = (this.bundle.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
-            if (btAdapter == null){
+            btAdapter =
+                (this.bundle.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+            if (btAdapter == null) {
                 Toast.makeText(this.bundle, "No se puede acceder al BT", Toast.LENGTH_LONG).show()
-            }else{
+            } else {
                 Toast.makeText(this.bundle, "EL BT está disponible", Toast.LENGTH_SHORT).show()
             }
-        }catch (e: java.lang.Exception){
+        } catch (e: java.lang.Exception) {
             Toast.makeText(this.bundle, "No se puede acceder al BT", Toast.LENGTH_LONG).show()
         }
 
-        button_on.setOnClickListener{
-            if (btAdapter.isEnabled){
+        button_on.setOnClickListener {
+            if (btAdapter.isEnabled) {
                 Toast.makeText(this.bundle, "EL BT está Activado", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 val enableBTIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                if (ActivityCompat.checkSelfPermission(this.bundle, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED ){
+                if (ActivityCompat.checkSelfPermission(
+                        this.bundle,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
                     Log.i("MainActivity", "ActivityCompat#requestPermissions")
                 }
                 someActivityResultLauncher.launch(enableBTIntent)
             }
         }
 
-        button_off.setOnClickListener{
-            if (!btAdapter.isEnabled){
+        button_off.setOnClickListener {
+            if (!btAdapter.isEnabled) {
                 Toast.makeText(this.bundle, "EL BT ya está desactivado", Toast.LENGTH_SHORT).show()
-            }else{
+            } else {
                 btAdapter.disable()
                 Toast.makeText(this.bundle, "EL BT se ha desactivado", Toast.LENGTH_SHORT).show()
             }
         }
 
-        button_devices.setOnClickListener{
-            if (btAdapter.isEnabled){
-                val pairDevices : Set<BluetoothDevice>? = btAdapter.bondedDevices
+        button_devices.setOnClickListener {
+            if (btAdapter.isEnabled) {
+                val pairDevices: Set<BluetoothDevice>? = btAdapter.bondedDevices
                 addressDevice!!.clear()
                 nameDevices!!.clear()
 
-                pairDevices?.forEach{device ->
+                pairDevices?.forEach { device ->
                     val deviceName = device.name
                     val deviceHardwareAddres = device.address
                     addressDevice!!.add(deviceHardwareAddres)
                     nameDevices!!.add(deviceName)
                 }
                 spinner_avaiable.adapter = nameDevices
-            }else{
+            } else {
                 val noDevices = "Ningún dispositivo pudo ser emparejado"
                 addressDevice!!.add(noDevices)
                 nameDevices!!.add(noDevices)
-                Toast.makeText(this.bundle, "Primero vincule un dispositivo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.bundle, "Primero vincule un dispositivo", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
-        button_connect.setOnClickListener{
+        button_connect.setOnClickListener {
             try {
-                if (socketBt == null || ! isConnected){
+                if (socketBt == null || !isConnected) {
                     val intValSpin = spinner_avaiable.selectedItemPosition
                     addres = addressDevice!!.getItem(intValSpin).toString()
                     Toast.makeText(this.bundle, addres, Toast.LENGTH_SHORT).show()
@@ -136,7 +143,7 @@ class ConnectionBT(var bundle: MainActivity) {
                 }
                 Toast.makeText(this.bundle, "Conexión Exitosa!", Toast.LENGTH_SHORT).show()
                 Log.i("MainActivity", "CONEXIÓN EXITOSA")
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 e.printStackTrace()
                 Toast.makeText(this.bundle, "ERROR DE CONEXIÓN", Toast.LENGTH_SHORT).show()
                 Log.i("MainActivity", "ERROR DE CONEXIÓN")
@@ -144,10 +151,11 @@ class ConnectionBT(var bundle: MainActivity) {
             }
         }
 
-        button_send.setOnClickListener{
-            if (text_send.text.toString().isEmpty()){
-                Toast.makeText(this.bundle, "No puede enviar un mensaje vacío", Toast.LENGTH_SHORT).show()
-            }else{
+        button_send.setOnClickListener {
+            if (text_send.text.toString().isEmpty()) {
+                Toast.makeText(this.bundle, "No puede enviar un mensaje vacío", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
                 var message: String = text_send.text.toString()
                 text_send.text.clear()
                 sendCommand(message)
@@ -165,55 +173,56 @@ class ConnectionBT(var bundle: MainActivity) {
         val button_chart = this.bundle.findViewById<Button>(R.id.button_chart)
         val button_export = this.bundle.findViewById<Button>(R.id.button_export)
 
-        button_0.setOnClickListener{
+        button_0.setOnClickListener {
             sendCommand("0")
         }
 
-        button_15.setOnClickListener{
+        button_15.setOnClickListener {
             sendCommand("2")
         }
 
-        button_30.setOnClickListener{
+        button_30.setOnClickListener {
             sendCommand("4")
         }
 
-        button_45.setOnClickListener{
+        button_45.setOnClickListener {
             sendCommand("7")
         }
 
-        button_start.setOnClickListener{
+        button_start.setOnClickListener {
             sendCommand("*")
-            if (socketBt != null){
+            if (socketBt != null) {
                 button_getTime.isEnabled = true
             }
         }
 
-        button_getTime.setOnClickListener{
-            if (socketBt != null){
+        button_getTime.setOnClickListener {
+            if (socketBt != null) {
                 receiveDataFromBluetooth("!")
                 button_getTime.isEnabled = false
             }
         }
 
-        button_clear.setOnClickListener{
+        button_clear.setOnClickListener {
             text_entrys.text.clear()
         }
 
-        button_export.setOnClickListener{
+        button_export.setOnClickListener {
             val chart: BarChart = this.bundle.findViewById(R.id.chart)
             val time: String = LocalDateTime.now().toString()
-            if (chart.data != null){
+            if (chart.data != null) {
                 chart.saveToGallery(time, "Pictures", "Grafica app", Bitmap.CompressFormat.PNG, 100)
                 Toast.makeText(this.bundle, "Guardado en la galería", Toast.LENGTH_LONG).show()
             }
         }
 
-        button_chart.setOnClickListener{
-            if (!text_entrys.text.isEmpty()){
+        button_chart.setOnClickListener {
+            if (!text_entrys.text.isEmpty()) {
                 val data = text_entrys.text.split("\n").map { it.toFloat() }
                 generateGraphic(data)
-            }else{
-                Toast.makeText(this.bundle, "No se puede graficar sin datos", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this.bundle, "No se puede graficar sin datos", Toast.LENGTH_SHORT)
+                    .show()
             }
 
         }
@@ -222,45 +231,49 @@ class ConnectionBT(var bundle: MainActivity) {
 
     fun receiveDataFromBluetooth(input: String) {
         if (input == "*"){
-            Thread.sleep(50000)
-        }else if (input != "!"){
-            Thread.sleep(1000)
+            Thread.sleep(5000)
+        }else{
+            Thread.sleep(600)
         }
-            try{
-                val btInput: InputStream? = socketBt?.inputStream
-                val buffer = ByteArray(1024)
-                var bytes: Int
-                while (true){
-                    bytes = btInput!!.read(buffer)
-                    val message = String(buffer, 0, bytes)
-                    Toast.makeText(this.bundle, "Tiempo recibido: $message ms", Toast.LENGTH_LONG).show()
-                    text_entrys.append(message+"\n")
-                    break
+        try {
+            val btInput: InputStream? = socketBt?.inputStream
+            val buffer = ByteArray(1024)
+            var bytes: Int
+            while (true) {
+                bytes = btInput!!.read(buffer)
+                val message = String(buffer, 0, bytes)
+
+                if (input == "*"){
+                    text_entrys.append(message + "\n")
+                }else{
+                    Toast.makeText(this.bundle, "Angulo ajustado a $message grados", Toast.LENGTH_LONG)
+                        .show()
                 }
-            }catch (e: java.lang.Exception){
-                Log.i("Error", "No se pudo guardar la información")
-                Toast.makeText(this.bundle, "Error al recibir el tiempo", Toast.LENGTH_LONG).show()
-                e.printStackTrace()
+                break
             }
+        } catch (e: java.lang.Exception) {
+            Log.i("Error", "No se pudo guardar la información")
+            Toast.makeText(this.bundle, "Error al recibir el tiempo", Toast.LENGTH_LONG).show()
+            e.printStackTrace()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun sendCommand(input: String){
-        if (socketBt != null){
+    fun sendCommand(input: String) {
+        if (socketBt != null) {
             try {
                 socketBt!!.outputStream.write((input.toByteArray()))
-                if (input != "*"){
-                    receiveDataFromBluetooth(input)
-                }
-            }catch (e: IOException){
-                Toast.makeText(this.bundle, "No se pudo enviar el mensaje", Toast.LENGTH_SHORT).show()
+                receiveDataFromBluetooth(input)
+            } catch (e: IOException) {
+                Toast.makeText(this.bundle, "No se pudo enviar el mensaje", Toast.LENGTH_SHORT)
+                    .show()
             }
-        }else{
+        } else {
             Toast.makeText(this.bundle, "No existe el socket", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun generateGraphic(nums: List<Float>){
+    fun generateGraphic(nums: List<Float>) {
         val chart: BarChart = this.bundle.findViewById(R.id.chart)
         val left = chart.axisLeft
         val right = chart.axisRight
@@ -271,7 +284,7 @@ class ConnectionBT(var bundle: MainActivity) {
         //left.axisMinimum = 8f
         //left.axisMaximum = 10f
 
-        val entries = nums.mapIndexed {index, number ->
+        val entries = nums.mapIndexed { index, number ->
             BarEntry(index.toFloat(), number)
         }
 
