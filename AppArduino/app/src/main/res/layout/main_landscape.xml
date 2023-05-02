@@ -200,37 +200,399 @@
                 android:id="@+id/text_entrys"
                 android:layout_width="match_parent"
                 android:layout_height="121dp"
-                android:clickable="false"
                 android:ems="10"
-                android:focusable="false"
                 android:gravity="start|top"
                 android:inputType="none|textMultiLine"
-                android:textIsSelectable="false" />
+                 />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="665dp"
             android:orientation="vertical">
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/chart"
-                android:layout_width="800dp"
-                android:layout_height="542dp"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:layout_marginStart="49dp"
-                android:layout_marginEnd="49dp"
-                android:background="@android:color/white"
-                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
-                tools:ignore="MissingConstraints">
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="585dp">
 
-            </com.github.mikephil.charting.charts.BarChart>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="CALCULOS PARA 15 GRADOS"
+                                android:textAlignment="center"
+                                android:textColor="#000000"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TableLayout
+                                android:id="@+id/table_15"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_vertical"
+                                android:layout_marginStart="25dp"
+                                android:layout_marginEnd="25dp"
+                                android:background="@drawable/table_border"
+                                android:stretchColumns="*">
+
+                                <!-- Row 1: Column Names -->
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/table_border"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:id="@+id/tvLanzamiento"
+                                        android:padding="10dp"
+                                        android:text="Lanzamiento"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvDistancia"
+                                        android:padding="10dp"
+                                        android:text="Distancia"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvTiempo"
+                                        android:padding="10dp"
+                                        android:text="Tiempo"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvVelocidad"
+                                        android:padding="10dp"
+                                        android:text="Velocidad"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvAceleracion"
+                                        android:padding="10dp"
+                                        android:text="Aceleración"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                </TableRow>
+
+                                <!-- Add more rows as necessary -->
+
+                            </TableLayout>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/distance_time_15"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/speed_time_15"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/ac_time_15"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                        </LinearLayout>
+                    </ScrollView>
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="CALCULOS PARA 30 GRADOS"
+                                android:textAlignment="center"
+                                android:textColor="#000000"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TableLayout
+                                android:id="@+id/table_30"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_vertical"
+                                android:layout_marginStart="25dp"
+                                android:layout_marginEnd="25dp"
+                                android:background="@drawable/table_border"
+                                android:stretchColumns="*">
+
+                                <!-- Row 1: Column Names -->
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/table_border"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:id="@+id/tvLanzamiento2"
+                                        android:padding="10dp"
+                                        android:text="Lanzamiento"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvDistancia2"
+                                        android:padding="10dp"
+                                        android:text="Distancia"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvTiempo2"
+                                        android:padding="10dp"
+                                        android:text="Tiempo"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvVelocidad2"
+                                        android:padding="10dp"
+                                        android:text="Velocidad"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvAceleracion2"
+                                        android:padding="10dp"
+                                        android:text="Aceleración"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                </TableRow>
+
+                                <!-- Add more rows as necessary -->
+
+                            </TableLayout>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/distance_time_30"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/speed_time_30"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/ac_time_30"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                        </LinearLayout>
+                    </ScrollView>
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/textView33"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="CALCULOS PARA 45 GRADOS"
+                                android:textAlignment="center"
+                                android:textColor="#000000"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TableLayout
+                                android:id="@+id/table_45"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="fill_vertical"
+                                android:layout_marginStart="25dp"
+                                android:layout_marginEnd="25dp"
+                                android:background="@drawable/table_border"
+                                android:stretchColumns="*">
+
+                                <!-- Row 1: Column Names -->
+                                <TableRow
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/table_border"
+                                    android:textAlignment="center">
+
+                                    <TextView
+                                        android:id="@+id/tvLanzamiento3"
+                                        android:padding="10dp"
+                                        android:text="Lanzamiento"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvDistancia3"
+                                        android:padding="10dp"
+                                        android:text="Distancia"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvTiempo3"
+                                        android:padding="10dp"
+                                        android:text="Tiempo"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvVelocidad3"
+                                        android:padding="10dp"
+                                        android:text="Velocidad"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/tvAceleracion3"
+                                        android:padding="10dp"
+                                        android:text="Aceleración"
+                                        android:textAlignment="center"
+                                        android:textStyle="bold" />
+
+                                </TableRow>
+
+                                <!-- Add more rows as necessary -->
+
+                            </TableLayout>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/distance_time_45"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/speed_time_45"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/ac_time_45"
+                                android:layout_width="800dp"
+                                android:layout_height="542dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:layout_marginStart="49dp"
+                                android:layout_marginEnd="49dp"
+                                android:background="@android:color/white"
+                                app:layout_constraintTop_toBottomOf="@+id/text_entrys"
+                                tools:ignore="MissingConstraints">
+
+                            </com.github.mikephil.charting.charts.BarChart>
+
+                        </LinearLayout>
+                    </ScrollView>
+
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="65dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:orientation="horizontal">
